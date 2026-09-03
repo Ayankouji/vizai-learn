@@ -359,7 +359,7 @@ function Chart({
           .map((p, i) => `${i === 0 ? "M" : "L"} ${sx(p.x)} ${sy(p.y)}`)
           .join(" ");
         const color = `var(--node-${s.color})`;
-        const last = s.points[s.points.length - 1];
+        const last = s.points[s.points.length - 1] ?? { x: 0, y: 0 };
         return (
           <g key={s.id} style={{ opacity: active ? 1 : 0.4, transition: "opacity 0.5s" }}>
             <path
