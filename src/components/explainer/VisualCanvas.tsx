@@ -66,7 +66,7 @@ interface Props {
 }
 
 export function VisualCanvas({ lesson, step }: Props) {
-  const placed = useMemo(() => lesson.nodes.map(place), [lesson.nodes]);
+  const placed = useMemo(() => normalize(lesson.nodes).map(place), [lesson.nodes]);
   const byId = useMemo(() => new Map(placed.map((n) => [n.id, n])), [placed]);
   const intro = useMemo(() => firstAppearance(lesson), [lesson]);
   const current = lesson.steps[step];
