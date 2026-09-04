@@ -16,6 +16,24 @@ interface Placed extends LessonNode {
   h: number;
 }
 
+/** Stretch a cramped layout so it fills the canvas (keeps relative positions). */
+function normalize(nodes: LessonNode[]): LessonNode[] {
+  if (nodes.length < 2) return nodes;
+  const xs = nodes.map((n) => n.x);
+  const ys = nodes.map((n) => n.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const rangeX = maxX - minX;
+  const rangeY = maxY - minY;
+  const fit = (v: number, min: number, range: number, lo: number, hi: number) =>
+    range < 1 ? (lo + hi) / 2 : lo + ((v - min) / range) * (hi - lo);
+  return nodes.map((n) => ({
+    ...n,
+    x: rangeX < 75 ? fit(n.x, minX, rangeX, 8, 92) : n.x,
+    y: rangeY < 65 && rangeY >= 12 ? fit(n.y, minY, rangeY, 10, 90) : n.y,
+  }));
+}
+
 function place(node: LessonNode): Placed {
   const cx = PAD_X + (node.x / 100) * (W - PAD_X * 2);
   const cy = PAD_TOP + (node.y / 100) * (H - PAD_TOP - PAD_BOTTOM);
